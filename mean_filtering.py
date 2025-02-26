@@ -36,7 +36,7 @@ def mean_filtering_color(file_path: str) -> None:
     B = scipy.ndimage.convolve(image_array[:,:,2], kernel, mode='constant', cval=0)
     
     filtered_array = np.stack([R, G, B], axis=2).astype(np.uint8)  
-    output_path = os.path.join('Computer_vision', 'Images', 'Output', file_name)
+    output_path = os.path.join('Images', 'Output', file_name)
     os.makedirs(os.path.dirname(output_path), exist_ok=True)  
     image_filtered = Image.fromarray(filtered_array)
     image_filtered.save(output_path)
