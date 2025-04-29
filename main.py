@@ -1,115 +1,6 @@
-import os
-import numpy as np
 import tkinter as tk
 from tkinter import filedialog
-import scipy
-from scipy import ndimage
-from PIL import Image
-
-
-def mean_filtering_greyscale(file_path: str) -> None:
-    file_name = os.path.basename(file_path)
-    
-    image = Image.open(file_path).convert('L')  
-    
-    kernel = np.ones((5,5)) / 25  
-    B = scipy.ndimage.convolve(image, kernel)
-        
-    B = Image.fromarray(B.astype(np.uint8))  
-    
-    output_path = os.path.join('Images', 'Output', file_name)
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)  
-    B.save(output_path)
-    print(f"Filtered image saved as {output_path}")
-    
-
-def mean_filtering_color(file_path: str) -> None:
-    file_name = os.path.basename(file_path)
-    
-    image = Image.open(file_path)
-    
-    image_array = np.array(image)
-    
-    kernel = np.ones((5, 5)) / 25  
-    
-    R = scipy.ndimage.convolve(image_array[:,:,0], kernel, mode='constant', cval=0)
-    G = scipy.ndimage.convolve(image_array[:,:,1], kernel, mode='constant', cval=0)
-    B = scipy.ndimage.convolve(image_array[:,:,2], kernel, mode='constant', cval=0)
-    
-    filtered_array = np.stack([R, G, B], axis=2).astype(np.uint8)  
-    output_path = os.path.join('Images', 'Output', file_name)
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)  
-    image_filtered = Image.fromarray(filtered_array)
-    image_filtered.save(output_path)
-    print(f"Filtered image saved as {output_path}")
-
-def median_filtering(file_path: str) -> None:
-    file_name = os.path.basename(file_path)
-    
-    image = Image.open(file_path)
-    
-    image_array = np.array(image)
-    
-    filtering_image = ndimage.median_filter(
-        image_array,
-        size=3,
-        footprint=None, 
-        output=None, 
-        mode='reflect', 
-        cval=0.0, 
-        origin=0
-    )
-    
-    output_path = os.path.join('Images', 'Output', file_name)
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    image_filtered = Image.fromarray(filtering_image)
-    image_filtered.save(output_path)
-    print(f"Filtered image saved as {output_path}")
-    
-def maximum_filtering(file_path: str) -> None:
-    file_name = os.path.basename(file_path)
-    
-    image = Image.open(file_path)
-    image_array = np.array(image)
-    
-    filtering_image = ndimage.maximum_filter(
-        image_array,
-        size=None,
-        footprint=None,
-        output=None,
-        mode='reflect',
-        cval=0.0,
-        origin=0
-    )
-    
-    output_path = os.path.join('Images', 'Output', file_name)
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    image_filtered = Image.fromarray(filtering_image)
-    image_filtered.save(output_path)
-    print(f"Filtered image saved as {output_path}")
-    
-def minimum_filtering(file_path: str) -> None:
-    file_name = os.path.basename(file_path)
-    
-    image = Image.save(file_path)
-    image_array = np.array(image)
-    
-    filtering_image = ndimage.minimum_filter(
-        image_array,
-        size=None,
-        footprint=None,
-        output=None,
-        mode='reflect',
-        cval=0.0,
-        origin=0
-    )
-    
-    output_path = os.path.join('Images', 'Output', file_name)
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    image_filtered = Image.fromarray(filtering_image)
-    image_filtered.save(output_path)
-    print(f'Filtered imaged saved as {output_path}')
-    
+from module import filter, edge_detection, image_enhancement
 
 def operasi(pilihan: int) -> None:
     if pilihan == 1:
@@ -122,7 +13,7 @@ def operasi(pilihan: int) -> None:
         
         file_path: str = filedialog.askopenfilename()
         
-        mean_filtering_color(file_path)
+        filter.mean_filtering_color(file_path)
         
     elif pilihan == 2:
         print("========================================")
@@ -134,7 +25,7 @@ def operasi(pilihan: int) -> None:
         
         file_path: str = filedialog.askopenfilename()
         
-        mean_filtering_greyscale(file_path)
+        filter.mean_filtering_greyscale(file_path)
         
     elif pilihan == 3:
         print("========================================")
@@ -146,7 +37,7 @@ def operasi(pilihan: int) -> None:
         
         file_path: str = filedialog.askopenfilename()
         
-        median_filtering(file_path)
+        filter.median_filtering(file_path)
         
     elif pilihan == 4:
         print("========================================")
@@ -158,7 +49,7 @@ def operasi(pilihan: int) -> None:
         
         file_path: str = filedialog.askopenfilename()
         
-        maximum_filtering(file_path)
+        filter.maximum_filtering(file_path)
         
     elif pilihan == 5:
         print("=========================================")
@@ -170,10 +61,46 @@ def operasi(pilihan: int) -> None:
         
         file_path: str = filedialog.askopenfilename()
         
-        minimum_filtering(file_path)
-    
+        filter.minimum_filtering(file_path)
+     
     elif pilihan == 6:
-        print("Exiting the program.")
+        print("=========================================")
+        print("|    6. Edge Detection Sobel            |")
+        print("=========================================")
+        
+        root = tk.Tk()
+        root.withdraw()
+        
+        file_path: str = filedialog.askopenfilename()
+        
+        edge_detection.sobel(file_path)
+    
+    elif pilihan == 7:
+        print("=========================================")
+        print("|    7. Edge Detection Prewitt          |")
+        print("=========================================")
+        
+        root = tk.Tk()
+        root.withdraw()
+        
+        file_path: str = filedialog.askopenfilename()
+
+        edge_detection.prewitt(file_path)
+
+    elif pilihan == 8:
+        print("=========================================")
+        print("|    8. Inverse Image                  |")
+        print("=========================================")
+        
+        root = tk.Tk()
+        root.withdraw()
+        
+        file_path: str = filedialog.askopenfilename()
+
+        image_enhancement.brightness_image(file_path)
+
+    elif pilihan == 0:
+        print("TERIMA KASIH")
         exit()
 
 def displayMenu() -> None:
@@ -182,8 +109,10 @@ def displayMenu() -> None:
     print("|    2. Filter Mean Image Greyscale       |")
     print("|    3. Filter Median Image               |")
     print("|    4. Filter Maximum Image              |")
-    print("|    5. Filter Minimum Image                 |")
-    print("|    6. Exit                              |")
+    print("|    5. Filter Minimum Image              |")
+    print("|    6. Edge Detection Sobel              |")
+    print("|    7. Edge Detection Prewitt            |")
+    print("|    0. Exit                              |")
     print("===========================================")
 
 if __name__ == "__main__":

@@ -1,8 +1,5 @@
 import os
 import numpy as np
-import tkinter as tk
-from tkinter import filedialog
-import scipy.ndimage
 from PIL import Image
 
 def mean_filtering_greyscale(file_path: str) -> None:
@@ -33,6 +30,24 @@ def mean_filtering_greyscale(file_path: str) -> None:
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     output_image.save(output_path)
     print(f"Filtered grayscale image saved as {output_path}")
+
+def median_filtering(file_path: str) -> None:
+    file_name = os.path.basename(file_path)
+    image = Image.open(file_path)
+    
+    image_array = np.array(image, dtype=np.float32)
+    output = np.zeros_like(image_array)
+    
+    kernel = 3
+    rows, cols = image_array.shape
+    pad = kernel // 2
+    
+    for i in range(pad_r, rows - pad_r):
+        for j in range(pad_c, cols - pad_c):
+            
+            for k in range(-pad_r, pad_c + 1):
+                for l in range(-pad_c, pad_c + 1):
+                      
     
 def mean_filtering_color(file_path: str) -> None:
     file_name = os.path.basename(file_path)
@@ -65,48 +80,3 @@ def mean_filtering_color(file_path: str) -> None:
     output_image.save(output_path)
     print(f"Filtered color image saved as {output_path}")
 
-def operasi(pilihan: int) -> None:
-    if pilihan == 1:
-        print("=========================================")
-        print("|    1. Filter Mean Image Color         |")
-        print("=========================================")
-        
-        root = tk.Tk()
-        root.withdraw()
-        
-        file_path: str = filedialog.askopenfilename()
-        
-        mean_filtering_color(file_path)
-        
-    elif pilihan == 2:
-        print("========================================")
-        print("|    2. Filter Mean Image Greyscale     |")
-        print("========================================")
-        
-        root = tk.Tk()
-        root.withdraw()
-        
-        file_path: str = filedialog.askopenfilename()
-        
-        mean_filtering_greyscale(file_path)
-    
-    elif pilihan == 3:
-        print("Exiting the program.")
-        exit()
-
-def displayMenu() -> None:
-    print("======================================")
-    print("|    1. Filter Mean Image Color      |")
-    print("|    2. Filter Mean Image Greyscale  |")
-    print("|    3. Exit                         |")
-    print("======================================")
-
-if __name__ == "__main__":
-    print("====== Image Filter =======")
-    
-    while(True):
-        displayMenu()
-        
-        pilihan = int(input("Masukkan pilihan: "))
-        
-        operasi(pilihan)
