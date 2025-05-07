@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from module import filter, edge_detection, image_enhancement
+from module import filters, edge_detection, image_enhancement
 
 def operasi(pilihan: int) -> None:
     if pilihan == 1:
@@ -97,7 +97,7 @@ def operasi(pilihan: int) -> None:
         
         file_path: str = filedialog.askopenfilename()
 
-        image_enhancement.brightness_image(file_path)
+        image_enhancement.contrast_stretching(file_path)
 
     elif pilihan == 0:
         print("TERIMA KASIH")

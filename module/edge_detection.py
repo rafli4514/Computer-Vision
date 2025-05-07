@@ -22,7 +22,6 @@ def sobel(file_path: str) -> None:
 
 def prewitt(file_path: str) -> None:
     image = os.path.basename(file_path)
-
     image = Image.open(file_path).convert('L')
     image = np.array(image).astype('int32')
 

@@ -1,4 +1,4 @@
-from module import filter
+from module import filters
 import tkinter as tk
 from tkinter import filedialog
 
@@ -14,7 +14,7 @@ def operasi(pilihan: int) -> None:
         
         file_path: str = filedialog.askopenfilename()
         
-        filter.mean_filtering_greyscale()
+        filters.mean_filtering_greyscale()
         
     elif pilihan == 2:
         print("========================================")
